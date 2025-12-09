@@ -1,0 +1,553 @@
+<!-- game.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logic Matrix Puzzle - Discrete Mathematics Game</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* Player Profile Display Styles */
+        .player-profile-display {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background-color: rgba(15, 23, 42, 0.95);
+            border-radius: 15px;
+            padding: 15px;
+            border: 2px solid #3b82f6;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 180px;
+            backdrop-filter: blur(10px);
+            animation: slideInLeft 0.5s ease-out;
+        }
+
+        .profile-picture-display {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid #3b82f6;
+            overflow: hidden;
+            margin-bottom: 10px;
+            background-color: #1e293b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-picture-display img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-picture-display .default-avatar {
+            font-size: 40px;
+            color: #93c5fd;
+        }
+
+        .player-info {
+            text-align: center;
+            color: white;
+        }
+
+        .player-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #60a5fa;
+            margin-bottom: 5px;
+        }
+
+        .player-details {
+            font-size: 0.85rem;
+            color: #d1d5db;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .player-age {
+            color: #fbbf24;
+        }
+
+        .logout-btn {
+            background-color: #ef4444;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .logout-btn:hover {
+            background-color: #dc2626;
+            transform: scale(1.05);
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Adjust main container to accommodate profile */
+        .container {
+            margin-left: 200px;
+        }
+
+        @media (max-width: 1200px) {
+            .player-profile-display {
+                position: relative;
+                top: auto;
+                left: auto;
+                width: 100%;
+                max-width: 300px;
+                margin: 0 auto 20px;
+                flex-direction: row;
+                justify-content: flex-start;
+                gap: 15px;
+            }
+            
+            .profile-picture-display {
+                width: 60px;
+                height: 60px;
+                margin-bottom: 0;
+            }
+            
+            .player-info {
+                text-align: left;
+                flex: 1;
+            }
+            
+            .container {
+                margin-left: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .player-profile-display {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            
+            .player-info {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Player Profile Display -->
+    <div class="player-profile-display" id="player-profile-display">
+        <div class="profile-picture-display" id="profile-picture-display">
+            <div class="default-avatar">
+                <i class="fas fa-user-circle"></i>
+            </div>
+        </div>
+        <div class="player-info">
+            <div class="player-name" id="player-name-display">Player</div>
+            <div class="player-details">
+                <span class="player-age" id="player-age-display">Age: --</span>
+                <span id="player-email-display"></span>
+            </div>
+            <button class="logout-btn" id="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </div>
+
+
+
+<!-- High Score Display -->
+<div class="high-score-container" id="high-score-container">
+    <h3><i class="fas fa-trophy"></i> HIGH SCORES</h3>
+    <div id="high-scores-list">
+        <!-- High scores will be loaded here -->
+    </div>
+</div>
+
+<!-- Game Complete Modal -->
+<div id="game-complete-modal" class="game-complete-modal">
+    <div class="game-complete-content">
+        <div class="medal gold" id="medal-display">
+            <i class="fas fa-trophy"></i>
+        </div>
+        <h2>GAME COMPLETE!</h2>
+        <div class="new-high-score" id="new-high-score" style="display: none;">
+            <i class="fas fa-crown"></i> NEW HIGH SCORE!
+        </div>
+        <div class="final-score" id="final-score-display">0</div>
+        <p>You've completed all levels!</p>
+        <p>Total Score: <span id="total-score-display">0</span></p>
+        
+        <div class="high-score-badge" id="rank-display">
+            Rank: #<span id="rank-number">1</span>
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <button id="play-again-btn" class="start-btn">
+                <i class="fas fa-redo"></i> PLAY AGAIN
+            </button>
+            <button id="new-player-btn" class="start-btn" style="background: linear-gradient(to right, #7c3aed, #8b5cf6); margin-top: 10px;">
+                <i class="fas fa-user-plus"></i> NEW PLAYER
+            </button>
+        </div>
+        
+        <p style="color: #9ca3af; font-size: 0.9rem; margin-top: 20px;">
+            Your score has been saved to the leaderboard!
+        </p>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+    <div class="container">
+        <!-- Header Section -->
+        <header>
+            <div class="header-content">
+                <h1><i class="fas fa-cube"></i> LOGIC MATRIX PUZZLE</h1>
+                <p class="subtitle">A Discrete Mathematics Game Project</p>
+                <div class="course-info">
+                    <p><span class="label">Course:</span> MS 101 - Discrete Mathematics</p>
+                    <p><span class="label">Topics Applied:</span> Boolean Algebra, Set Theory, Matrix Operations</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Game Area -->
+        <main>
+            <div class="game-container">
+                <div class="game-header">
+                    <h2><i class="fas fa-gamepad"></i> Game Level: <span id="level">1</span></h2>
+                    <div class="score-time">
+                        <div class="score">
+                            <i class="fas fa-star"></i> Score: <span id="score">0</span>
+                        </div>
+                        <div class="timer">
+                            <i class="fas fa-clock"></i> Time: <span id="timer">120</span>s
+                        </div>
+                    </div>
+                </div>
+
+                <div class="game-area">
+                    <!-- Boolean Algebra Section -->
+                    <div class="game-section boolean-section">
+                        <h3><i class="fas fa-project-diagram"></i> Boolean Logic Challenge</h3>
+                        <div class="boolean-question">
+                            <p id="boolean-question-text">Simplify the expression: (A ∧ B) ∨ (A ∧ ¬B)</p>
+                            <div class="boolean-options">
+                                <button class="boolean-option" data-value="A">A</button>
+                                <button class="boolean-option" data-value="B">B</button>
+                                <button class="boolean-option" data-value="A ∧ B">A ∧ B</button>
+                                <button class="boolean-option" data-value="A ∨ B">A ∨ B</button>
+                            </div>
+                            <div class="boolean-feedback" id="boolean-feedback"></div>
+                        </div>
+                        <div class="k-map-section">
+                            <h4>Karnaugh Map Visualization</h4>
+                            <div class="k-map">
+                                <table class="k-map-table">
+                                    <tr>
+                                        <th></th>
+                                        <th>A=0</th>
+                                        <th>A=1</th>
+                                    </tr>
+                                    <tr>
+                                        <th>B=0</th>
+                                        <td id="cell-00">0</td>
+                                        <td id="cell-10">1</td>
+                                    </tr>
+                                    <tr>
+                                        <th>B=1</th>
+                                        <td id="cell-01">0</td>
+                                        <td id="cell-11">1</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Matrix Operations Section -->
+                    <div class="game-section matrix-section">
+                        <h3><i class="fas fa-th"></i> Matrix Operations</h3>
+                        <div class="matrix-container">
+                            <div class="matrix">
+                                <h5>Matrix A</h5>
+                                <table class="matrix-table">
+                                    <tr>
+                                        <td id="a11">1</td>
+                                        <td id="a12">0</td>
+                                    </tr>
+                                    <tr>
+                                        <td id="a21">0</td>
+                                        <td id="a22">1</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="matrix-operator">
+                                <select id="matrix-operation">
+                                    <option value="add">+</option>
+                                    <option value="multiply">×</option>
+                                    <option value="and">AND</option>
+                                    <option value="or">OR</option>
+                                </select>
+                            </div>
+                            <div class="matrix">
+                                <h5>Matrix B</h5>
+                                <table class="matrix-table">
+                                    <tr>
+                                        <td id="b11">1</td>
+                                        <td id="b12">1</td>
+                                    </tr>
+                                    <tr>
+                                        <td id="b21">0</td>
+                                        <td id="b22">1</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="matrix-equals">
+                                <span>=</span>
+                            </div>
+                            <div class="matrix">
+                                <h5>Result</h5>
+                                <table class="matrix-table result-matrix">
+                                    <tr>
+                                        <td id="r11">?</td>
+                                        <td id="r12">?</td>
+                                    </tr>
+                                    <tr>
+                                        <td id="r21">?</td>
+                                        <td id="r22">?</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="matrix-controls">
+                            <button id="calculate-matrix">Calculate Result</button>
+                            <button id="check-matrix">Check Answer</button>
+                        </div>
+                        <div class="matrix-feedback" id="matrix-feedback"></div>
+                    </div>
+
+                    <!-- Set Theory Section -->
+                    <div class="game-section set-section">
+                        <h3><i class="fas fa-circle"></i> Set Theory Problem</h3>
+                        <div class="set-problem">
+                            <p id="set-problem-text">Given: A = {1, 2, 3, 4}, B = {3, 4, 5, 6}</p>
+                            <p>What is A ∩ B (Intersection)?</p>
+                            <div class="set-options">
+                                <button class="set-option" data-value="{1,2}">{1, 2}</button>
+                                <button class="set-option" data-value="{3,4}">{3, 4}</button>
+                                <button class="set-option" data-value="{5,6}">{5, 6}</button>
+                                <button class="set-option" data-value="{1,2,3,4,5,6}">{1, 2, 3, 4, 5, 6}</button>
+                            </div>
+                        </div>
+                        <div class="venn-diagram">
+                            <h4>Venn Diagram</h4>
+                            <div class="venn-container">
+                                <div class="circle circle-a">
+                                    <span>A</span>
+                                </div>
+                                <div class="circle circle-b">
+                                    <span>B</span>
+                                </div>
+                                <div class="intersection"></div>
+                            </div>
+                            <div class="venn-legend" id="venn-legend">
+                                <div class="legend-item"><span class="legend-color a-color"></span> Set A: {1, 2, 3, 4}</div>
+                                <div class="legend-item"><span class="legend-color b-color"></span> Set B: {3, 4, 5, 6}</div>
+                                <div class="legend-item"><span class="legend-color int-color"></span> A ∩ B: {3, 4}</div>
+                            </div>
+                        </div>
+                        <div class="set-feedback" id="set-feedback"></div>
+                    </div>
+                </div>
+
+                <div class="game-controls">
+                    <button id="next-level" class="control-btn">
+                        <i class="fas fa-forward"></i> Next Level
+                    </button>
+                    <button id="reset-game" class="control-btn">
+                        <i class="fas fa-redo"></i> Reset Game
+                    </button>
+                    <button id="hint" class="control-btn">
+                        <i class="fas fa-lightbulb"></i> Get Hint
+                    </button>
+                    <button id="show-math" class="control-btn">
+                        <i class="fas fa-calculator"></i> Show Math Concepts
+                    </button>
+                </div>
+            </div>
+
+            <!-- Instructions Panel -->
+            <div class="instructions-panel">
+                <h3><i class="fas fa-info-circle"></i> How to Play</h3>
+                <ul>
+                    <li>Solve the Boolean logic problem by selecting the correct simplified expression</li>
+                    <li>Perform matrix operations and check your result</li>
+                    <li>Answer the set theory question by selecting the correct intersection</li>
+                    <li>Complete all three sections to advance to the next level</li>
+                    <li>Earn points for correct answers; faster answers earn bonus points</li>
+                </ul>
+                <div class="math-topics">
+                    <h4><i class="fas fa-book-open"></i> Discrete Math Topics Applied</h4>
+                    <div class="topics-list">
+                        <div class="topic-item">
+                            <h5>Boolean Algebra</h5>
+                            <p>Logical operations (AND, OR, NOT) and simplification using Karnaugh Maps</p>
+                        </div>
+                        <div class="topic-item">
+                            <h5>Matrix Operations</h5>
+                            <p>Matrix addition, multiplication, and logical operations on matrices</p>
+                        </div>
+                        <div class="topic-item">
+                            <h5>Set Theory</h5>
+                            <p>Set operations (intersection) visualized with Venn diagrams</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Game Design Project</h4>
+                    <p>Discrete Mathematics (MS 101)</p>
+                    <p>College of Information Technology</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Group Members</h4>
+                    <p>Narzoles, James </p>
+                    <p>Tagama, Daryl </p>
+                    <p>Herreria, Leo </p>
+                    <p>Bungallon, Rhazel</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Instructor</h4>
+                    <p>Charish Leaño Apelado, LPT</p>
+                    <p>1st Semester A.Y 2025-2026</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2025 Logic Matrix Puzzle - Final Output Project</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Math Concepts Modal -->
+    <div id="math-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-calculator"></i> Mathematical Concepts Applied</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="concept">
+                    <h3>1. Boolean Algebra & Karnaugh Maps</h3>
+                    <p>Boolean algebra is used to simplify logical expressions. The game demonstrates simplification of expressions like <code>(A ∧ B) ∨ (A ∧ ¬B) = A</code>.</p>
+                    <p>Karnaugh Maps provide visual simplification of Boolean functions with 2-4 variables.</p>
+                </div>
+                <div class="concept">
+                    <h3>2. Matrix Operations</h3>
+                    <p>Matrices represent data in rows and columns. The game includes:</p>
+                    <ul>
+                        <li><strong>Matrix Addition:</strong> Element-wise addition</li>
+                        <li><strong>Matrix Multiplication:</strong> Dot product of rows and columns</li>
+                        <li><strong>Logical Operations:</strong> Applying Boolean algebra to matrices</li>
+                    </ul>
+                </div>
+                <div class="concept">
+                    <h3>3. Set Theory</h3>
+                    <p>Set theory deals with collections of objects. The game demonstrates:</p>
+                    <ul>
+                        <li><strong>Intersection (A ∩ B):</strong> Elements common to both sets</li>
+                        <li><strong>Venn Diagrams:</strong> Visual representation of set relationships</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DITO MO ILAGAY ANG MGA SCRIPT AT EFFECTS -->
+    <!-- Sound Manager -->
+    <script src="sounds.js"></script>
+
+    <!-- Confetti Container -->
+    <div id="confetti-container" class="confetti-container"></div>
+
+    <!-- Level Up Message -->
+    <div id="level-up-message" class="level-up" style="display: none;">LEVEL UP!</div>
+
+    <!-- Player Profile Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if player is logged in
+            const playerData = localStorage.getItem('logicMatrixPlayer');
+            
+            if (!playerData) {
+                alert('⚠️ Please login first!');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Load and display player profile
+            try {
+                const player = JSON.parse(playerData);
+                
+                document.getElementById('player-name-display').textContent = player.name;
+                document.getElementById('player-age-display').textContent = `Age: ${player.age}`;
+                
+                if (player.email) {
+                    document.getElementById('player-email-display').textContent = player.email;
+                }
+                
+                const profilePictureDisplay = document.getElementById('profile-picture-display');
+                if (player.profilePicture) {
+                    profilePictureDisplay.innerHTML = `<img src="${player.profilePicture}" alt="${player.name}'s Profile Picture">`;
+                }
+                
+            } catch (e) {
+                console.error('Error loading player data:', e);
+            }
+            
+            // Logout button functionality
+            document.getElementById('logout-btn').addEventListener('click', function() {
+                if (confirm('Are you sure you want to logout?')) {
+                    localStorage.removeItem('logicMatrixPlayer');
+                    window.location.href = 'login.html';
+                }
+            });
+        });
+    </script>
+
+    <!-- Main Game Script -->
+    <script src="script.js"></script>
+</body>
+</html>

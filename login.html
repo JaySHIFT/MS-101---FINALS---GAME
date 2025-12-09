@@ -1,0 +1,473 @@
+<!-- login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Logic Matrix Puzzle</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* Login Page Specific Styles */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0a2a 0%, #1a1a3a 100%);
+            padding: 20px;
+        }
+
+        .login-box {
+            background-color: rgba(15, 23, 42, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            border: 3px solid #3b82f6;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            color: #3b82f6;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        }
+
+        .login-header p {
+            color: #93c5fd;
+            font-size: 1.1rem;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            color: #93c5fd;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group input,
+        .form-group select {
+            background-color: rgba(30, 41, 59, 0.8);
+            border: 2px solid #4b5563;
+            border-radius: 10px;
+            padding: 15px;
+            color: #f0f0f0;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        .profile-picture-section {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .profile-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            border: 4px solid #3b82f6;
+            background-color: #1e293b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .profile-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-preview .default-icon {
+            font-size: 60px;
+            color: #93c5fd;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            text-align: center;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            display: none;
+        }
+
+        .file-input-label {
+            background-color: #1e40af;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .file-input-label:hover {
+            background-color: #3b82f6;
+        }
+
+        .login-btn {
+            background: linear-gradient(to right, #1e40af, #3b82f6);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .login-btn:hover {
+            background: linear-gradient(to right, #3b82f6, #60a5fa);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+
+        .error-message {
+            background-color: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #f87171;
+            display: none;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .success-message {
+            background-color: rgba(34, 197, 94, 0.2);
+            color: #4ade80;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #4ade80;
+            display: none;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .age-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .age-input input {
+            flex: 1;
+        }
+
+        .age-input select {
+            flex: 1;
+            max-width: 120px;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .login-box {
+                padding: 25px;
+            }
+            
+            .login-header h1 {
+                font-size: 2rem;
+            }
+            
+            .profile-preview {
+                width: 120px;
+                height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <div class="login-header">
+                <h1><i class="fas fa-cube"></i> LOGIN TO PLAY</h1>
+                <p>Enter your details to start the Logic Matrix Puzzle</p>
+
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #374151;">
+    <h4 style="color: #fbbf24; text-align: center; margin-bottom: 15px;">
+        <i class="fas fa-trophy"></i> Current High Score
+    </h4>
+    <div id="current-high-score" style="text-align: center; color: #93c5fd; font-size: 1.2rem;">
+        Loading...
+    </div>
+</div>
+            </div>
+            
+            <div class="error-message" id="error-message"></div>
+            <div class="success-message" id="success-message"></div>
+            
+            <form class="login-form" id="login-form">
+                <div class="profile-picture-section">
+                    <div class="profile-preview" id="profile-preview">
+                        <div class="default-icon">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="file-input-wrapper">
+                        <input type="file" id="profile-picture" accept="image/*">
+                        <label for="profile-picture" class="file-input-label">
+                            <i class="fas fa-camera"></i> Choose Profile Picture
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="player-name"><i class="fas fa-user"></i> Player Name</label>
+                    <input type="text" id="player-name" placeholder="Enter your name" required minlength="2" maxlength="20">
+                </div>
+                
+                <div class="form-group">
+                    <label for="player-age"><i class="fas fa-birthday-cake"></i> Age</label>
+                    <div class="age-input">
+                        <input type="number" id="player-age" placeholder="Age" min="1" max="120" required>
+                        <select id="age-group">
+                            <option value="kid">Kid (1-12)</option>
+                            <option value="teen">Teen (13-19)</option>
+                            <option value="adult" selected>Adult (20+)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="player-email"><i class="fas fa-envelope"></i> Email (Optional)</label>
+                    <input type="email" id="player-email" placeholder="your.email@example.com">
+                </div>
+                
+                <button type="submit" class="login-btn" id="start-game-btn">
+                    <i class="fas fa-play"></i> START GAME
+                </button>
+            </form>
+            
+            <div class="login-footer">
+                <p>Your profile will be displayed during gameplay</p>
+                <p>© 2025 Logic Matrix Puzzle - Final Output Project</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('login-form');
+            const profilePictureInput = document.getElementById('profile-picture');
+            const profilePreview = document.getElementById('profile-preview');
+            const errorMessage = document.getElementById('error-message');
+            const successMessage = document.getElementById('success-message');
+            const startGameBtn = document.getElementById('start-game-btn');
+            
+            let profileImageData = null;
+            
+            // Handle profile picture selection
+            profilePictureInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    if (!file.type.startsWith('image/')) {
+                        showError('Please select an image file (JPG, PNG, GIF)');
+                        return;
+                    }
+                    
+                    if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                        showError('Image size should be less than 5MB');
+                        return;
+                    }
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        profileImageData = event.target.result;
+                        profilePreview.innerHTML = `<img src="${profileImageData}" alt="Profile Preview">`;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Handle form submission
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const playerName = document.getElementById('player-name').value.trim();
+                const playerAge = document.getElementById('player-age').value;
+                const playerEmail = document.getElementById('player-email').value.trim();
+                const ageGroup = document.getElementById('age-group').value;
+                
+                // Validate inputs
+                if (playerName.length < 2) {
+                    showError('Please enter a valid name (at least 2 characters)');
+                    return;
+                }
+                
+                if (!playerAge || playerAge < 1 || playerAge > 120) {
+                    showError('Please enter a valid age (1-120)');
+                    return;
+                }
+                
+                // Save player data to localStorage
+                const playerData = {
+                    name: playerName,
+                    age: playerAge,
+                    ageGroup: ageGroup,
+                    email: playerEmail || '',
+                    profilePicture: profileImageData,
+                    loginTime: new Date().toISOString()
+                };
+                
+                localStorage.setItem('logicMatrixPlayer', JSON.stringify(playerData));
+                
+                // Show success message
+                showSuccess(`Welcome ${playerName}! Redirecting to game...`);
+                startGameBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> LOADING GAME...';
+                startGameBtn.disabled = true;
+                
+                // Redirect to game page after 1.5 seconds
+setTimeout(() => {
+window.location.href = 'game.html'; // PALITAN MO ITO
+}, 1500); });
+            
+            // Function to show error message
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.style.display = 'block';
+                successMessage.style.display = 'none';
+                
+                // Auto-hide after 5 seconds
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                }, 5000);
+            }
+            
+            // Function to show success message
+            function showSuccess(message) {
+                successMessage.textContent = message;
+                successMessage.style.display = 'block';
+                errorMessage.style.display = 'none';
+            }
+            
+            // Auto-fill age group based on age input
+            document.getElementById('player-age').addEventListener('change', function() {
+                const age = parseInt(this.value);
+                const ageGroupSelect = document.getElementById('age-group');
+                
+                if (age >= 1 && age <= 12) {
+                    ageGroupSelect.value = 'kid';
+                } else if (age >= 13 && age <= 19) {
+                    ageGroupSelect.value = 'teen';
+                } else if (age >= 20) {
+                    ageGroupSelect.value = 'adult';
+                }
+            });
+            
+            // Check if player is already logged in
+            const savedPlayer = localStorage.getItem('logicMatrixPlayer');
+            if (savedPlayer) {
+                try {
+                    const playerData = JSON.parse(savedPlayer);
+                    document.getElementById('player-name').value = playerData.name || '';
+                    document.getElementById('player-age').value = playerData.age || '';
+                    document.getElementById('player-email').value = playerData.email || '';
+                    
+                    if (playerData.profilePicture) {
+                        profileImageData = playerData.profilePicture;
+                        profilePreview.innerHTML = `<img src="${playerData.profilePicture}" alt="Profile Preview">`;
+                    }
+                } catch (e) {
+                    console.log('Could not load saved player data');
+                }
+            }
+        });
+
+
+// Display current high score on login page
+function displayCurrentHighScore() {
+    try {
+        const scores = localStorage.getItem('logicMatrixHighScores');
+        if (scores) {
+            const parsedScores = JSON.parse(scores);
+            if (parsedScores.length > 0) {
+                const highest = parsedScores[0];
+                document.getElementById('current-high-score').innerHTML = `
+                    <div style="font-size: 2rem; color: #fbbf24; font-weight: bold;">
+                        ${highest.score}
+                    </div>
+                    <div style="font-size: 0.9rem;">
+                        by ${highest.name}
+                    </div>
+                `;
+                return;
+            }
+        }
+        document.getElementById('current-high-score').textContent = 'No scores yet!';
+    } catch (e) {
+        console.error('Error loading high score:', e);
+        document.getElementById('current-high-score').textContent = 'Error loading scores';
+    }
+}
+
+// Call it when page loads
+document.addEventListener('DOMContentLoaded', displayCurrentHighScore);
+
+
+
+
+
+
+    </script>
+</body>
+</html>

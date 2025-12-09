@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logic Matrix Puzzle - Welcome</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        .welcome-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0a2a 0%, #1a1a3a 100%);
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .welcome-box {
+            background-color: rgba(15, 23, 42, 0.95);
+            border-radius: 20px;
+            padding: 50px;
+            max-width: 800px;
+            border: 3px solid #3b82f6;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        }
+        
+        .welcome-box h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            color: #3b82f6;
+            margin-bottom: 20px;
+        }
+        
+        .welcome-box p {
+            color: #93c5fd;
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+        
+        .start-btn {
+            background: linear-gradient(to right, #1e40af, #3b82f6);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 12px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .start-btn:hover {
+            background: linear-gradient(to right, #3b82f6, #60a5fa);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 40px;
+        }
+        
+        .feature-item {
+            background-color: rgba(30, 41, 59, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .feature-item h3 {
+            color: #60a5fa;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="welcome-container">
+        <div class="welcome-box">
+            <h1><i class="fas fa-cube"></i> LOGIC MATRIX PUZZLE</h1>
+            <p>A Discrete Mathematics Game Project</p>
+            <p>Test your knowledge in Boolean Algebra, Matrix Operations, and Set Theory</p>
+            
+            <div class="features">
+                <div class="feature-item">
+                    <h3><i class="fas fa-project-diagram"></i> Boolean Logic</h3>
+                    <p>Simplify expressions using Karnaugh Maps</p>
+                </div>
+                <div class="feature-item">
+                    <h3><i class="fas fa-th"></i> Matrix Operations</h3>
+                    <p>Perform addition, multiplication, and logical operations</p>
+                </div>
+                <div class="feature-item">
+                    <h3><i class="fas fa-circle"></i> Set Theory</h3>
+                    <p>Solve intersection problems with Venn diagrams</p>
+                </div>
+            </div>
+            
+            <button class="start-btn" onclick="window.location.href='login.html'">
+                <i class="fas fa-play"></i> START GAME
+            </button>
+            
+            <div style="margin-top: 30px; color: #9ca3af;">
+                <p>Course: MS 101 - Discrete Mathematics</p>
+                <p>1st Semester A.Y 2025-2026</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
